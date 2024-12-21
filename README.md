@@ -2,7 +2,7 @@
 
 # MarzneshinIpLimit
 
-**An Enhanced Fork of [v2iplimit](https://github.com/v2iplimit/v2iplimit) by Houshmand**<br>
+**An Enhanced Fork of [v2iplimit](https://github.com/houshmand-2005/v2iplimit) by Houshmand**<br>
 **Featuring Stronger Algorithms and Resolved Issues from v2iplimit**<br>
 **Supports IPv4, IPv6, and Marzneshin-node**<br>
 <sub>(Tested on Ubuntu 22.04 & 24.04, Fedora 39 & 40)</sub>
@@ -16,10 +16,6 @@
 - [Installation](#installation)
 - [Telegram Bot Commands](#telegram-bot-commands)
 - [API Documentation](#api-documentation)
-- [Common Issues and Solutions](#common-issues-and-solutions)
-- [Using Cron Jobs](#using-cron-jobs)
-- [Build](#build)
-- [Donations](#donations)
 
 ## Installation
 
@@ -49,15 +45,15 @@ cd /opt/MarzneshinIpLimit
 Download the required files:
 
 ```bash
-curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/houshmand/config.json"
+curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/main/config.json" && nano config.json
 ```
 
 ```bash
-curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/houshmand/app.log"
+curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/main/app.log"
 ```
 
 ```bash
-curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/houshmand/docker-compose.yml"
+curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/main/docker-compose.yml"
 ```
 
 Start the Docker container:
