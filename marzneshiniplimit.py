@@ -5,10 +5,8 @@ main file that run other files and functions to run the program.
 
 import argparse
 import asyncio
-import time
 
 from run_telegram import run_telegram_bot
-from telegram_bot.send_message import send_logs
 from utils.check_usage import run_check_users_usage
 from utils.get_logs import (
     TASKS,
@@ -35,39 +33,52 @@ args = parser.parse_args()
 
 dis_obj = DisabledUsers()
 
+TASKS = {}
+dis_obj = DisabledUsers()
+
+config_file = None
+
+async def reload_config():
+    """Reload config.json every 5 seconds."""
+    global config_file
+    while True:
+        try:
+            config_file = await read_config(check_required_elements=False)
+            logger.info("Config reloaded.")
+        except ValueError as error:
+            logger.error(f"Error loading config: {error}")
+        except Exception as e:
+            logger.error(f"Unexpected error: {e}")
+        await asyncio.sleep(5)
+
 
 async def main():
     """Main function to run the code."""
+    global config_file
     print("Telegram Bot running...")
-    asyncio.create_task(run_telegram_bot())
+    asyncio.create_task(run_telegram_bot())  # Start Telegram bot in a separate task
     await asyncio.sleep(2)
-    while True:
-        try:
-            config_file = await read_config(check_required_elements=True)
-            break
-        except ValueError as error:
-            logger.error(error)
-            await send_logs(("<code>" + str(error) + "</code>"))
-            await send_logs(
-                "Please fill the <b>required</b> elements"
-                + " (you can see more detail for each one with sending /start):\n"
-                + "/create_config: <code>Config panel information (username, password,...)</code>\n"
-                + "/country_code: <code>Set your country code"
-                + " (to increase accuracy)</code>\n"
-                + "/set_general_limit_number: <code>Set the general limit number</code>\n"
-                + "/set_check_interval: <code>Set the check interval time</code>\n"
-                + "/set_time_to_active_users: <code>Set the time to active users</code>\n"
-                + "\nIn <b>60 seconds</b> later the program will try again."
-            )
-            await asyncio.sleep(60)
+    
+    # Load initial config
+    config_file = await read_config(check_required_elements=True)
+
+    # Initialize panel data
     panel_data = PanelType(
         config_file["PANEL_USERNAME"],
         config_file["PANEL_PASSWORD"],
         config_file["PANEL_DOMAIN"],
     )
+
+    # Start periodic config reload
+    asyncio.create_task(reload_config())
+
+    # Enable disabled users initially
     dis_users = await dis_obj.read_and_clear_users()
     await enable_selected_users(panel_data, dis_users)
+
+    # Fetch and process nodes
     await get_nodes(panel_data)
+
     async with asyncio.TaskGroup() as tg:
         nodes_list = await get_nodes(panel_data)
         if nodes_list and not isinstance(nodes_list, ValueError):
@@ -94,13 +105,17 @@ async def main():
             enable_dis_user(panel_data),
             name="enable_dis_user",
         )
-        await run_check_users_usage(panel_data)
+
+        # Run usage checking
+        while True:
+            await run_check_users_usage(panel_data)
+            await asyncio.sleep(60)  # Main loop execution interval
 
 
 if __name__ == "__main__":
     while True:
         try:
             asyncio.run(main())
-        except Exception as er:  # pylint: disable=broad-except
-            logger.error(er)
-            time.sleep(10)
+        except Exception as er:  # Handle unexpected errors
+            logger.error(f"Unexpected error: {er}")
+            asyncio.sleep(10)
