@@ -3,4 +3,3 @@ __pycache__
 /utils/__pycache__
 app.log
 cronjob_log.log
-api.py
