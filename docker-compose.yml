@@ -2,8 +2,7 @@ services:
   marzneshin_ip_limit:
     image: ghcr.io/muttehitler/marzneshiniplimit:main
     restart: always
-    ports:
-      - 6284:6284
+    network_mode: host
     volumes:
       - /opt/marzneshiniplimit/config.json:/marzneshiniplimitcode/config.json
       - /opt/marzneshiniplimit/app.log:/marzneshiniplimitcode/app.log
