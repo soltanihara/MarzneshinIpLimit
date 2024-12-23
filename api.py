@@ -63,7 +63,7 @@ def login():
     password = data.get('password')
 
     # Replace with actual authentication logic
-    if username == "admin" and password == "password":
+    if username == API_USERNAME and password == API_PASSWORD:
         token = create_access_token(username)
         return jsonify({"access_token": token, "token_type": "bearer"})
     return jsonify({"error": "Invalid credentials"}), 401
@@ -71,7 +71,7 @@ def login():
 @app.route('/update_special_limit', methods=['POST'])
 @token_required
 def update_special_limit(username):
-    if username != "admin":
+    if username != API_USERNAME:
         return jsonify({"error": "Unauthorized"}), 403
 
     data = request.get_json()
