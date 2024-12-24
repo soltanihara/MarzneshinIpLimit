@@ -2,9 +2,10 @@
 
 # MarzneshinIpLimit
 
+<b>Limiting the number of active users with IP for [Marzneshin](https://github.com/marzneshin/marzneshin)</b><sub> (with xray logs)</sub><br>
 **An Enhanced Fork of [v2iplimit](https://github.com/houshmand-2005/v2iplimit) by Houshmand**<br>
 **Featuring Stronger Algorithms and Resolved Issues from v2iplimit**<br>
-**Supports IPv4, IPv6, and Marzneshin-node**<br>
+**Supports IPv4, IPv6, and Marz-node**<br>
 <sub>(Tested on Ubuntu 22.04 & 24.04, Fedora 39 & 40)</sub>
 
 </center>
