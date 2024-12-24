@@ -39,8 +39,8 @@ curl -fsSL https://get.docker.com | sh
 Create a directory for the project:
 
 ```bash
-mkdir /opt/MarzneshinIpLimit
-cd /opt/MarzneshinIpLimit
+mkdir /opt/marzneshiniplimit
+cd /opt/marzneshiniplimit
 ```
 
 Download the required files:
