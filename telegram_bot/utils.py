@@ -123,10 +123,10 @@ async def handel_special_limit(username: str, limit: int) -> list:
                 special_limit[i] = [username, limit]
                 data['SPECIAL_LIMIT'] = special_limit
                 await write_json_file(data)
-                return [set_before, special_limit[username]]
+                return [set_before, special_limit[i]]
     data = {"SPECIAL_LIMIT": [[username, limit]]}
     await write_json_file(data)
-    return [0, special_limit[username]]
+    return [0, special_limit[0]]
 
 async def remove_admin_from_config(admin_id: int) -> bool:
     """
@@ -177,7 +177,7 @@ async def add_base_information(domain: str, password: str, username: str):
     await write_json_file(data)
 
 
-async def get_special_limit_list() -> list | None:
+async def get_special_limit_message() -> list | None:
     """
     This function reads config file, retrieves the list of special limits,
     and returns this list in a format suitable for messaging (split into shorter messages).
