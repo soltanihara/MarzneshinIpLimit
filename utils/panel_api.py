@@ -56,6 +56,8 @@ async def get_token(panel_data: PanelType) -> PanelType | ValueError:
             except SSLError:
                 continue
             except Exception as error:  # pylint: disable=broad-except
+                if scheme == "https":
+                    continue
                 message = f"An unexpected error occurred: {error}"
                 await send_logs(message)
                 logger.error(message)
@@ -111,6 +113,8 @@ async def all_user(panel_data: PanelType) -> list[UserType] | ValueError:
                 logger.error(message)
                 continue
             except Exception as error:  # pylint: disable=broad-except
+                if scheme == "https":
+                    continue
                 message = f"An unexpected error occurred: {error}"
                 await send_logs(message)
                 logger.error(message)
@@ -172,6 +176,8 @@ async def enable_all_user(panel_data: PanelType) -> None | ValueError:
                 logger.error(message)
                 continue
             except Exception as error:  # pylint: disable=broad-except
+                if scheme == "https":
+                    continue
                 message = f"An unexpected error occurred: {error}"
                 await send_logs(message)
                 logger.error(message)
@@ -228,6 +234,8 @@ async def enable_selected_users(
                     logger.error(message)
                     continue
                 except Exception as error:  # pylint: disable=broad-except
+                    if scheme == "https":
+                        continue
                     message = f"An unexpected error occurred: {error}"
                     await send_logs(message)
                     logger.error(message)
@@ -293,6 +301,8 @@ async def disable_user(panel_data: PanelType, username: UserType) -> None | Valu
                 logger.error(message)
                 continue
             except Exception as error:  # pylint: disable=broad-except
+                if scheme == "https":
+                    continue
                 message = f"An unexpected error occurred: {error}"
                 await send_logs(message)
                 logger.error(message)
@@ -357,6 +367,8 @@ async def get_nodes(panel_data: PanelType) -> list[NodeType] | ValueError:
                 logger.error(message)
                 continue
             except Exception as error:  # pylint: disable=broad-except
+                if scheme == "https":
+                    continue
                 message = f"An unexpected error occurred: {error}"
                 await send_logs(message)
                 logger.error(message)
