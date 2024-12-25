@@ -1,6 +1,6 @@
 services:
   marzneshin_ip_limit:
-    image: ghcr.io/muttehitler/marzneshiniplimit:latest
+    image: ghcr.io/muttehitler/marzneshiniplimit:main
     restart: always
     environment:
       PORT: 6284
