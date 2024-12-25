@@ -111,22 +111,34 @@ async def handel_special_limit(username: str, limit: int) -> list:
         limit: The limit to set.
 
     Returns:
-        A list where the first element is a flag indicating whether the limit was set before,
-        and the second element is the new limit.
+        A list where the first element is the previous limit (or 0 if not set),
+        and the second element is the updated limit.
     """
-    set_before = 0
+    set_before = 0  # Default previous limit
     if os.path.exists("config.json"):
+        # Read the existing data
         data = await read_json_file()
-        special_limit = data.get("SPECIAL_LIMIT", {})
-        if special_limit.get(username):
-            set_before = 1
-        special_limit[username] = limit
-        data["SPECIAL_LIMIT"] = special_limit
-        await write_json_file(data)
-        return [set_before, special_limit[username]]
-    data = {"SPECIAL_LIMIT": {username: limit}}
+        special_limit = data.get("SPECIAL_LIMIT", [])
+        
+        # Check if the user already exists in SPECIAL_LIMIT
+        for i, (existing_user, existing_limit) in enumerate(special_limit):
+            if existing_user == username:
+                set_before = existing_limit  # Save the previous limit
+                special_limit[i] = [username, limit]  # Update the limit
+                data["SPECIAL_LIMIT"] = special_limit  # Update SPECIAL_LIMIT in data
+                await write_json_file(data)  # Write the full data back to the file
+                return [set_before, special_limit[i]]
+        
+        # If user doesn't exist, append the new entry
+        special_limit.append([username, limit])
+        data["SPECIAL_LIMIT"] = special_limit  # Update SPECIAL_LIMIT in data
+        await write_json_file(data)  # Write the full data back to the file
+        return [0, [username, limit]]
+    
+    # If config.json doesn't exist, create it with the initial structure
+    data = {"SPECIAL_LIMIT": [[username, limit]]}
     await write_json_file(data)
-    return [0, special_limit[username]]
+    return [0, [username, limit]]
 
 
 async def remove_admin_from_config(admin_id: int) -> bool:
@@ -178,7 +190,7 @@ async def add_base_information(domain: str, password: str, username: str):
     await write_json_file(data)
 
 
-async def get_special_limit_list() -> list | None:
+async def get_special_limit_message() -> list | None:
     """
     This function reads config file, retrieves the list of special limits,
     and returns this list in a format suitable for messaging (split into shorter messages).
@@ -188,17 +200,13 @@ async def get_special_limit_list() -> list | None:
     """
     if os.path.exists("config.json"):
         data = await read_json_file()
-        special_list = data.get("SPECIAL_LIMIT", None)
+        special_list = data.get('SPECIAL_LIMIT', [])
         if not special_list:
             return None
-        special_list = "\n".join(
-            [f"{key} : {value}" for key, value in special_list.items()]
-        )
-        messages = special_list.split("\n")
-        shorter_messages = [
-            "\n".join(messages[i : i + 100]) for i in range(0, len(messages), 100)
-        ]
-        return shorter_messages
+        message = ''
+        for i, (user, limit) in enumerate(special_list):
+            message += f'{user} : {limit}\n'
+        return message
     return None
 
 
