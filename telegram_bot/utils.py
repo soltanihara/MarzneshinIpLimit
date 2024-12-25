@@ -45,29 +45,29 @@ async def get_token(panel_data: PanelType) -> PanelType | ValueError:
 
 async def read_json_file() -> dict:
     """
-    Reads and returns the content of the config.json file.
+    Reads and returns the content of the ../config.json file.
 
     Returns:
-        The content of the config.json file.
+        The content of the ../config.json file.
     """
-    with open("/marzneshiniplimitcode/config.json", "r", encoding="utf-8") as f:
+    with open("../config.json", "r", encoding="utf-8") as f:
         return json.load(f)
 
 
 async def write_json_file(data: dict):
     """
-    Writes the given data to the config.json file.
+    Writes the given data to the ../config.json file.
 
     Args:
         data: The data to write to the file.
     """
-    with open("/marzneshiniplimitcode/config.json", "w", encoding="utf-8") as f:
+    with open("../config.json", "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
 
 
 async def add_admin_to_config(new_admin_id: int) -> int | None:
     """
-    Adds a new admin ID to the config.json file.
+    Adds a new admin ID to the ../config.json file.
 
     Args:
         new_admin_id: The ID of the new admin.
@@ -75,7 +75,7 @@ async def add_admin_to_config(new_admin_id: int) -> int | None:
     Returns:
         The ID of the new admin if it was added, None otherwise.
     """
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
         admins = data.get("ADMINS", [])
         if int(new_admin_id) not in admins:
@@ -92,12 +92,12 @@ async def add_admin_to_config(new_admin_id: int) -> int | None:
 
 async def check_admin() -> list[int] | None:
     """
-    Checks and returns the list of admins from the config.json file.
+    Checks and returns the list of admins from the ../config.json file.
 
     Returns:
         The list of admins.
     """
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
         return data.get("ADMINS", [])
 
@@ -115,7 +115,7 @@ async def handel_special_limit(username: str, limit: int) -> list:
         and the second element is the new limit.
     """
     set_before = 0
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
         special_limit = data.get("SPECIAL_LIMIT", [])
         for i, (existing_user, existing_limit) in enumerate(special_limit):
@@ -163,7 +163,7 @@ async def add_base_information(domain: str, password: str, username: str):
     await get_token(
         PanelType(panel_domain=domain, panel_password=password, panel_username=username)
     )
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
     else:
         data = {}
@@ -185,7 +185,7 @@ async def get_special_limit_message() -> list | None:
     Returns:
         list
     """
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
         special_list = data.get('SPECIAL_LIMIT', [])
         if not special_list:
@@ -199,7 +199,7 @@ async def get_special_limit_message() -> list | None:
 
 async def write_country_code_json(country_code: str) -> None:
     """
-    Writes the given country code to the config.json file.
+    Writes the given country code to the ../config.json file.
 
     Args:
         country_code: The country code to write to the file.
@@ -214,7 +214,7 @@ async def add_except_user(except_user: str) -> str | None:
     Add a user to the exception list in the config file.
     If the config file does not exist, it creates one.
     """
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
         user = data.get("EXCEPT_USERS", [])
         if except_user not in user:
@@ -234,7 +234,7 @@ async def show_except_users_handler() -> list | None:
     Retrieve the list of exception users from the config file.
     If the list is too long, it splits the list into shorter messages.
     """
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
         except_users = data.get("EXCEPT_USERS", None)
         if not except_users:
@@ -267,7 +267,7 @@ async def save_general_limit(limit: int) -> int:
     Save the general limit to the config file.
     If the config file does not exist, it creates one.
     """
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
         data["GENERAL_LIMIT"] = limit
         await write_json_file(data)
@@ -282,7 +282,7 @@ async def save_check_interval(interval: int) -> int:
     Save the check interval to the config file.
     If the config file does not exist, it creates one.
     """
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
         data["CHECK_INTERVAL"] = interval
         await write_json_file(data)
@@ -297,7 +297,7 @@ async def save_time_to_active_users(time: int) -> int:
     Save the time to active users to the config file.
     If the config file does not exist, it creates one.
     """
-    if os.path.exists("/marzneshiniplimitcode/config.json"):
+    if os.path.exists("../config.json"):
         data = await read_json_file()
         data["TIME_TO_ACTIVE_USERS"] = time
         await write_json_file(data)
