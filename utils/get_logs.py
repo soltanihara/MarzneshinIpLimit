@@ -43,7 +43,7 @@ async def get_nodes_logs(panel_data: PanelType, node: NodeType) -> None:
     Raises:
         ValueError: If there is an issue with getting the panel token.
     """
-    for scheme in [ "ws"]:
+    for scheme in ["wss", "ws"]:
         while True:
             interval = random.choice(("0.9", "1.3", "1.5", "1.7"))
             get_panel_token = await get_token(panel_data)
