@@ -117,17 +117,13 @@ async def handel_special_limit(username: str, limit: int) -> list:
     set_before = 0
     if os.path.exists("config.json"):
         data = await read_json_file()
-        special_limit = data.get("SPECIAL_LIMIT", {})
-        if special_limit.get(username):
-            set_before = 1
-        special_limit[username] = limit
-        data["SPECIAL_LIMIT"] = special_limit
-        await write_json_file(data)
-        return [set_before, special_limit[username]]
-    data = {"SPECIAL_LIMIT": {username: limit}}
-    await write_json_file(data)
-    return [0, special_limit[username]]
-
+        special_limit = data.get("SPECIAL_LIMIT", [])
+        for i, (existing_user, existing_limit) in enumerate(special_limit):
+            if existing_user == username:
+                special_limit[i] = [username, limit]
+                data['SPECIAL_LIMIT'] = special_limit
+                await write_json_file(data)
+                return [set_before, special_limit[username]]
 
 async def remove_admin_from_config(admin_id: int) -> bool:
     """
