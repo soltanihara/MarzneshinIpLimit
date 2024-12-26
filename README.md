@@ -147,6 +147,31 @@ Content-Type: application/json
 }
 ```
 
+### config.json
+```json
+{
+    "GENERAL_LIMIT":1,
+    "BOT_TOKEN": "BotToken",
+    "ADMINS":[112234455],
+    "EXCEPT_USERS": [
+        ["user"]
+    ],
+    "PANEL_USERNAME": "username",
+    "PANEL_PASSWORD": "pass",
+    "PANEL_DOMAIN": "address:port", //Without http or https
+    "SECRET_KEY": "supersecretkey", //Change to a strong string like: @j#@#kjlk! 
+    "API_USERNAME": "username",
+    "API_PASSWORD": "password",
+    "CHECK_INTERVAL": 30,
+    "TIME_TO_ACTIVE_USERS": 2400,
+    "SPECIAL_LIMIT": [
+        ["user", 1]
+    ],
+    "outOfLimitNumber": 3, //How often to check user IPs
+    "IP_LOCATION":"IR" //IP filter
+}
+```
+
 ### Note:
 
 - This API ensures that special limits are securely updated or added with the help of JWT authentication.
