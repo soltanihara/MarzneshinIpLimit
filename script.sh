@@ -192,9 +192,9 @@ marzneshin_ip_limit_cli() {
 
 
 update_marzneshin_ip_limit_script() {
-    colorized_echo blue "Updating marzneshin script"
-    curl -sSL $SCRIPT_URL | install -m 755 /dev/stdin /usr/local/bin/marzneshin
-    colorized_echo green "marzneshin script updated successfully"
+    colorized_echo blue "Updating marzneshiniplimit script"
+    curl -sSL $SCRIPT_URL | install -m 755 /dev/stdin /usr/local/bin/marzneshiniplimit
+    colorized_echo green "marzneshiniplimit script updated successfully"
 }
 
 update_marzneshin_ip_limit() {
