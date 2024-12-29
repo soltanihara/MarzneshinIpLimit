@@ -3,6 +3,7 @@ import socket
 
 LOG_FILE_PATH = "/marzneshiniplimitcode/app.log"
 CONFIG_FILE_PATH = "/marzneshiniplimitcode/config.json"
+API_PORT = 6284
 
 def check_logs_for_errors():
     """بررسی لاگ برای متن 'Unexpected error'"""
@@ -18,6 +19,14 @@ def check_logs_for_errors():
         return False, f"Error reading log file: {str(e)}"
     return True, "Logs are clean"
 
+def check_port_open():
+    """بررسی باز بودن پورت 6284"""
+    try:
+        with socket.create_connection(("127.0.0.1", API_PORT), timeout=2):
+            return True, f"Port {API_PORT} is open"
+    except (socket.timeout, socket.error):
+        return False, f"Port {API_PORT} is not open"
+
 def check_config_file():
     """بررسی وجود فایل config.json"""
     if os.path.exists(CONFIG_FILE_PATH):
@@ -27,6 +36,7 @@ def check_config_file():
 def run_health_checks():
     checks = [
         check_logs_for_errors,
+        check_port_open,
         check_config_file
     ]
     for check in checks:
