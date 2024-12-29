@@ -12,6 +12,6 @@ RUN pip install --no-cache-dir --upgrade -r /marzneshiniplimitcode/requirements.
 
 COPY . /marzneshiniplimitcode
 
-RUN chmod +x marzneshiniplimit.py api.py
+RUN chmod +x marzneshiniplimit.py api.py health_check.py
 
 CMD ["bash", "-c", "python marzneshiniplimit.py & python api.py"]
