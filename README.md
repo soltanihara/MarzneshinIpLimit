@@ -14,53 +14,26 @@
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [Installation](#installation)
 - [Telegram Bot Commands](#telegram-bot-commands)
 - [API Documentation](#api-documentation)
-
-## Installation
-
-### Overview
+- [Manual Configuration](#manual-configuration)
+---
+## Overview
 
 This project is an advanced version of v2iplimit, forked and improved to address the limitations and challenges of the original code. Key enhancements include:
 
 - Stronger, more efficient algorithms.
 - Fixes for inaccuracies in IP counting.
 - Expanded functionality and compatibility.
+---
+## Installation
 
-### Installation with Docker
-
-Install Docker:
-
-```bash
-curl -fsSL https://get.docker.com | sh
-```
-
-Create a directory for the project:
+Install command:
 
 ```bash
-mkdir /opt/marzneshiniplimit
-cd /opt/marzneshiniplimit
-```
-
-Download the required files:
-
-```bash
-curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/main/config.json" && nano config.json
-```
-
-```bash
-curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/main/app.log"
-```
-
-```bash
-curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/main/docker-compose.yml"
-```
-
-Start the Docker container:
-
-```bash
-docker compose up -d
+sudo bash -c "$(curl -sL https://github.com/muttehitler/MarzneshinIpLimit/raw/main/script.sh)" @ install
 ```
 
 ## Telegram Bot Commands
@@ -83,9 +56,6 @@ MarzneshinIpLimit can be controlled via a Telegram bot. Here are the available c
 - **`/set_time_to_active_users`**: Set the time to active users.
 - **`/backup`**: Send the `config.json` file.
 
-<hr>
-
-This updated fork is designed to optimize performance while simplifying configuration and management. For more details and troubleshooting, refer to the following sections.
 
 ---
 
@@ -147,6 +117,16 @@ Content-Type: application/json
 }
 ```
 
+### Note:
+
+- This API ensures that special limits are securely updated or added with the help of JWT authentication.
+- The server runs on port **6284**.
+- Proper authorization is required to access these endpoints. Ensure your token is valid and not expired.
+
+---
+
+## Manual Configuration
+
 ### config.json
 ```json
 {
@@ -171,11 +151,4 @@ Content-Type: application/json
     "IP_LOCATION":"IR" //IP filter
 }
 ```
-
-### Note:
-
-- This API ensures that special limits are securely updated or added with the help of JWT authentication.
-- The server runs on port **6284**.
-- Proper authorization is required to access these endpoints. Ensure your token is valid and not expired.
-
 ---
