@@ -144,9 +144,9 @@ install_marzneshin_ip_limit() {
 }
 
 uninstall_marzneshin_ip_limit_script() {
-    if [ -f "/usr/local/bin/marzneshin" ]; then
-        colorized_echo yellow "Removing marzneshin script"
-        rm "/usr/local/bin/marzneshin"
+    if [ -f "/usr/local/bin/marzneshiniplimit" ]; then
+        colorized_echo yellow "Removing marzneshiniplimit script"
+        rm "/usr/local/bin/marzneshiniplimit"
     fi
 }
 
