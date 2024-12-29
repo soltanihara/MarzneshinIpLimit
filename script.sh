@@ -186,10 +186,6 @@ follow_marzneshin_ip_limit_logs() {
     $COMPOSE -f $COMPOSE_FILE -p "$APP_NAME" logs -f
 }
 
-marzneshin_ip_limit_cli() {
-    $COMPOSE -f $COMPOSE_FILE -p "$APP_NAME" exec -e CLI_PROG_NAME="marzneshin cli" marzneshin /app/marzneshin-cli.py "$@"
-}
-
 
 update_marzneshin_ip_limit_script() {
     colorized_echo blue "Updating marzneshiniplimit script"
@@ -466,23 +462,6 @@ logs_command() {
     fi
 }
 
-cli_command() {
-    # Check if marzneshin ip limit is installed
-    if ! is_marzneshin_ip_limit_installed; then
-        colorized_echo red "MarzneshinIpLimit is not installed!"
-        exit 1
-    fi
-
-    detect_compose
-
-    if ! is_marzneshin_ip_limit_up; then
-        colorized_echo red "MarzneshinIpLimit is not up."
-        exit 1
-    fi
-
-    marzneshin_ip_limit_cli "$@"
-}
-
 update_command() {
     check_running_as_root
     # Check if marzneshin ip limit is installed
@@ -600,7 +579,6 @@ usage() {
     echo "  logs            Show logs"
     echo "  token           Set telegram bot token"
     echo "  admins           Set telegram admins"
-    echo "  cli             MarzneshinIpLimit command-line interface"
     echo "  install         Install MarzneshinIpLimit"
     echo "  update          Update latest version"
     echo "  uninstall       Uninstall MarzneshinIpLimit"
@@ -623,8 +601,6 @@ case "$1" in
     shift; create_or_update_token "$@";;
     admins)
     shift; create_or_update_admins "$@";;
-    cli)
-    shift; cli_command "$@";;
     install)
     shift; install_command "$@";;
     update)
