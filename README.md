@@ -1,3 +1,15 @@
+<p align="center">
+    <a href="#">
+        <img src="https://img.shields.io/github/license/muttehitler/MarzneshinIpLimit?style=flat-square" />
+    </a>
+    <a href="https://t.me/muttehitler" target="_blank">
+        <img src="https://img.shields.io/badge/telegram-group-blue?style=flat-square&logo=telegram" />
+    </a>
+    <a href="#">
+        <img src="https://img.shields.io/github/stars/muttehitler/MarzneshinIpLimit?style=social" />
+    </a>
+</p>
+
 <center>
 
 # MarzneshinIpLimit
@@ -35,6 +47,33 @@ Install command:
 ```bash
 sudo bash -c "$(curl -sL https://github.com/muttehitler/MarzneshinIpLimit/raw/main/script.sh)" @ install
 ```
+
+1. Enter your bot token
+   Create a telegram bot with [bot father](https://t.me/BotFather) and enter it
+   
+3. Enter admin chat id
+   Get admin chat id with [My Id Bot](https://t.me/myidbot) and enter it
+   
+5. Enter your panel address, user and password
+   First enter your panel address without http or https like: sub.example.com:443
+   Second enter your panel username
+   Third enter your panel password
+
+Adjust other settings from the telegram bot
+
+For manage the app use `marzneshiniplimit` command:
+
+- `up`              Start services 
+- `down`            Stop services
+- `restart`         Restart services
+- `status`          Show status
+- `logs`            Show logs
+- `token`           Set telegram bot token
+- `admins`          Set telegram admins
+- `install`         Install MarzneshinIpLimit
+- `update`          Update latest version
+- `uninstall`       Uninstall MarzneshinIpLimit
+- `install-script`  Install MarzneshinIpLimit script
 
 ## Telegram Bot Commands
 
