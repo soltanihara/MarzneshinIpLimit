@@ -579,7 +579,7 @@ usage() {
     echo "  status          Show status"
     echo "  logs            Show logs"
     echo "  token           Set telegram bot token"
-    echo "  admins           Set telegram admins"
+    echo "  admins          Set telegram admins"
     echo "  install         Install MarzneshinIpLimit"
     echo "  update          Update latest version"
     echo "  uninstall       Uninstall MarzneshinIpLimit"
