@@ -4,7 +4,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /marzneshiniplimitcode
 
-RUN apt-get update && apt install procps -y
+RUN apt-get update && apt install -y procps curl
 
 COPY ./requirements.txt /marzneshiniplimitcode/
 
