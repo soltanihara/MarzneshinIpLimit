@@ -243,6 +243,7 @@ install_command() {
     update_panel
     up_marzneshin_ip_limit
     colorized_echo green "Adjust other configurations from the telegram bot"
+    follow_marzneshin_ip_limit_logs
 }
 
 uninstall_command() {
@@ -456,9 +457,9 @@ logs_command() {
     fi
 
     if [ "$no_follow" = true ]; then
-        show_marzneshin_ip_limit_logs
+        tail -n 50 "$CONFIG_DIR/app.log"
     else
-        follow_marzneshin_ip_limit_logs
+        tail -n 100 -f "$CONFIG_DIR/app.log"
     fi
 }
 
