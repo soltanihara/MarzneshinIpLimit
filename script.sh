@@ -491,10 +491,6 @@ create_or_update_token() {
     if [ -f "$CONFIG_DIR/config.json" ]; then
         token=$(jq -r '.BOT_TOKEN' "$CONFIG_DIR/config.json")
         echo "Current BOT_TOKEN is: $token"
-        read -p "Do you want to change it? (y/n) " confirm
-        if [[ $confirm != [Yy]* ]]; then
-            return
-        fi
     fi
 
     echo "You must create a bot and get the token, you can get it from @BotFather in Telegram."
@@ -517,10 +513,6 @@ create_or_update_admins() {
     if [ -f "$CONFIG_DIR/config.json" ]; then
         admin=$(jq -r '.ADMINS' "$CONFIG_DIR/config.json")
         echo "Current ADMIN is: $admin"
-        read -p "Do you want to change it? (y/n) " confirm
-        if [[ $confirm != [Yy]* ]]; then
-            return
-        fi
     fi
 
     echo "You must set your chat ID, you can get it from @userinfobot in Telegram."
@@ -545,10 +537,6 @@ update_panel() {
     if [ -f "$CONFIG_DIR/config.json" ]; then
         address=$(jq -r '.PANEL_DOMAIN' "$CONFIG_DIR/config.json")
         echo "Current panel address is: $address"
-        read -p "Do you want to change it? (y/n) " confirm
-        if [[ $confirm != [Yy]* ]]; then
-            return
-        fi
     fi
 
     echo "\n"
