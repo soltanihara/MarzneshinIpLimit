@@ -30,7 +30,7 @@ from telegram_bot.utils import (
     add_base_information,
     add_except_user,
     check_admin,
-    get_special_limit_list,
+    get_special_limit_message,
     handel_special_limit,
     read_json_file,
     remove_admin_from_config,
@@ -384,10 +384,9 @@ async def show_special_limit_function(
     check = await check_admin_privilege(update)
     if check:
         return check
-    out_put = await get_special_limit_list()
+    out_put = await get_special_limit_message()
     if out_put:
-        for user in out_put:
-            await update.message.reply_html(text=user)
+        await update.message.reply_html(text=out_put)
     else:
         await update.message.reply_html(text="No special limit found!")
 

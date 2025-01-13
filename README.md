@@ -1,10 +1,23 @@
+<p align="center">
+    <a href="#">
+        <img src="https://img.shields.io/github/license/muttehitler/MarzneshinIpLimit?style=flat-square" />
+    </a>
+    <a href="https://t.me/muttehitler" target="_blank">
+        <img src="https://img.shields.io/badge/telegram-group-blue?style=flat-square&logo=telegram" />
+    </a>
+    <a href="#">
+        <img src="https://img.shields.io/github/stars/muttehitler/MarzneshinIpLimit?style=social" />
+    </a>
+</p>
+
 <center>
 
 # MarzneshinIpLimit
 
+<b>Limiting the number of active users with IP for [Marzneshin](https://github.com/marzneshin/marzneshin)</b><sub> (with xray logs)</sub><br>
 **An Enhanced Fork of [v2iplimit](https://github.com/houshmand-2005/v2iplimit) by Houshmand**<br>
 **Featuring Stronger Algorithms and Resolved Issues from v2iplimit**<br>
-**Supports IPv4, IPv6, and Marzneshin-node**<br>
+**Supports IPv4, IPv6, and Marz-node**<br>
 <sub>(Tested on Ubuntu 22.04 & 24.04, Fedora 39 & 40)</sub>
 
 </center>
@@ -13,54 +26,54 @@
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [Installation](#installation)
 - [Telegram Bot Commands](#telegram-bot-commands)
 - [API Documentation](#api-documentation)
-
-## Installation
-
-### Overview
+- [Manual Configuration](#manual-configuration)
+---
+## Overview
 
 This project is an advanced version of v2iplimit, forked and improved to address the limitations and challenges of the original code. Key enhancements include:
 
 - Stronger, more efficient algorithms.
 - Fixes for inaccuracies in IP counting.
 - Expanded functionality and compatibility.
+---
+## Installation
 
-### Installation with Docker
-
-Install Docker:
-
-```bash
-curl -fsSL https://get.docker.com | sh
-```
-
-Create a directory for the project:
+Install command:
 
 ```bash
-mkdir /opt/MarzneshinIpLimit
-cd /opt/MarzneshinIpLimit
+sudo bash -c "$(curl -sL https://github.com/muttehitler/MarzneshinIpLimit/raw/main/script.sh)" @ install
 ```
 
-Download the required files:
+1. Enter your bot token
+   Create a telegram bot with [bot father](https://t.me/BotFather) and enter it
+   
+3. Enter admin chat id
+   Get admin chat id with [My Id Bot](https://t.me/myidbot) and enter it
+   
+5. Enter your panel address, user and password
+   First enter your panel address without http or https like: sub.example.com:443
+   Second enter your panel username
+   Third enter your panel password
 
-```bash
-curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/main/config.json" && nano config.json
-```
+Adjust other settings from the telegram bot
 
-```bash
-curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/main/app.log"
-```
+For manage the app use `marzneshiniplimit` command:
 
-```bash
-curl -O -L "https://raw.githubusercontent.com/muttehitler/MarzneshinIpLimit/main/docker-compose.yml"
-```
-
-Start the Docker container:
-
-```bash
-docker compose up -d
-```
+- `up`              Start services 
+- `down`            Stop services
+- `restart`         Restart services
+- `status`          Show status
+- `logs`            Show logs
+- `token`           Set telegram bot token
+- `admins`          Set telegram admins
+- `install`         Install MarzneshinIpLimit
+- `update`          Update latest version
+- `uninstall`       Uninstall MarzneshinIpLimit
+- `install-script`  Install MarzneshinIpLimit script
 
 ## Telegram Bot Commands
 
@@ -82,9 +95,6 @@ MarzneshinIpLimit can be controlled via a Telegram bot. Here are the available c
 - **`/set_time_to_active_users`**: Set the time to active users.
 - **`/backup`**: Send the `config.json` file.
 
-<hr>
-
-This updated fork is designed to optimize performance while simplifying configuration and management. For more details and troubleshooting, refer to the following sections.
 
 ---
 
@@ -146,6 +156,16 @@ Content-Type: application/json
 }
 ```
 
+### Note:
+
+- This API ensures that special limits are securely updated or added with the help of JWT authentication.
+- The server runs on port **6284**.
+- Proper authorization is required to access these endpoints. Ensure your token is valid and not expired.
+
+---
+
+## Manual Configuration
+
 ### config.json
 ```json
 {
@@ -170,11 +190,4 @@ Content-Type: application/json
     "IP_LOCATION":"IR" //IP filter
 }
 ```
-
-### Note:
-
-- This API ensures that special limits are securely updated or added with the help of JWT authentication.
-- The server runs on port **6284**.
-- Proper authorization is required to access these endpoints. Ensure your token is valid and not expired.
-
 ---
