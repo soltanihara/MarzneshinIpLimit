@@ -96,14 +96,14 @@ async def all_user(panel_data: PanelType) -> list[UserType] | ValueError:
             "Authorization": f"Bearer {token}",
         }
         for scheme in ["https","http"]:
-            url = f"{scheme}://{panel_data.panel_domain}/api/users"
+            url = f"{scheme}://{panel_data.panel_domain}/api/users?owner_username={(await read_config()).get("OWNER_USERNAME")}"
             try:
                 async with httpx.AsyncClient(verify=False) as client:
                     response = await client.get(url, headers=headers, timeout=10)
                     response.raise_for_status()
                 user_inform = response.json()
                 return [
-                    UserType(name=user["username"]) for user in user_inform["users"]
+                    UserType(name=user["username"]) for user in user_inform["items"]
                 ]
             except SSLError:
                 continue

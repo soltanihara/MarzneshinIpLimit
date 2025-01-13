@@ -19,14 +19,21 @@ from utils.types import PanelType, UserType
 ACTIVE_USERS: dict[str, UserType] | dict = {}
 
 
-async def check_ip_used() -> dict:
+async def check_ip_used(panel_data: PanelType, owner: str) -> dict:
     """
     This function checks if a user (name and IP address)
     appears more than two times in the ACTIVE_USERS list.
     """
+
     all_users_log = {}
+    allusers=none
+    if owner:
+        allusers=[user.name for user in await all_user(panel_data)]
+
     for email in list(ACTIVE_USERS.keys()):
         data = ACTIVE_USERS[email]
+        if owner and data.name not in allusers:
+            continue
         ip_counts = Counter(data.ip)
         data.ip = list({ip for ip in data.ip if ip_counts[ip] > 2})
         all_users_log[email] = data.ip
@@ -60,7 +67,7 @@ async def check_users_usage(panel_data: PanelType):
     checks the usage of active users
     """
     config_data = await read_config()
-    all_users_log = await check_ip_used()
+    all_users_log = await check_ip_used(panel_data, config_data.get("OWNER_USERNAME"))
     except_users = config_data.get("EXCEPT_USERS", [])
     special_limit = config_data.get("SPECIAL_LIMIT", {})
     limit_number = config_data["GENERAL_LIMIT"]
