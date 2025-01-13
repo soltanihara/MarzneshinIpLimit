@@ -26,7 +26,7 @@ async def check_ip_used(panel_data: PanelType, owner: str) -> dict:
     """
 
     all_users_log = {}
-    allusers=none
+    allusers=None
     if owner:
         allusers=[user.name for user in await all_user(panel_data)]
 
