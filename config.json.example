@@ -6,6 +6,7 @@
     "PANEL_USERNAME": "username",
     "PANEL_PASSWORD": "pass",
     "PANEL_DOMAIN": "address:port",
+    "OWNER_USERNAME": "username",
     "SECRET_KEY": "supersecretkey",
     "API_USERNAME": "username",
     "API_PASSWORD": "password",
