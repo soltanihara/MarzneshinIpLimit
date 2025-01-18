@@ -229,6 +229,9 @@ async def enable_selected_users(
                 except SSLError:
                     continue
                 except httpx.HTTPStatusError:
+                    if response.status_code == 409:
+                        success = True
+                        break
                     message = f"[{response.status_code}] {response.text}"
                     await send_logs(message)
                     logger.error(message)
