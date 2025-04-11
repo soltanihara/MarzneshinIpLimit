@@ -134,7 +134,7 @@ async def handle_cancel_all(tasks: list[Task], panel_data: PanelType) -> None:
     # pylint: disable=duplicate-code
     async with asyncio.TaskGroup() as tg:
         while True:
-            await asyncio.sleep(8192)  # =~ 2 hours and 27 minutes
+            await asyncio.sleep(2 * 60 * 60)  # =~ 2 hours
             for task in tasks:
                 print(f"Cancelling {task.get_name()}...")
                 task.cancel()
