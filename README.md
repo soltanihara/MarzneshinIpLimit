@@ -112,21 +112,19 @@ python run_telegram.py
 * `adminId` : ادمینی که مسئول این کاربر است
 
 ---
----
-For manage the app use marzneshiniplimit command:
+For manage the app use `marzneshiniplimit` command:
 
-up Start services
-down Stop services
-restart Restart services
-status Show status
-logs Show logs
-token Set telegram bot token
-admins Set telegram admins
-install Install MarzneshinIpLimit
-update Update latest version
-uninstall Uninstall MarzneshinIpLimit
-install-script Install MarzneshinIpLimit script
-
+- `up`              Start services 
+- `down`            Stop services
+- `restart`         Restart services
+- `status`          Show status
+- `logs`            Show logs
+- `token`           Set telegram bot token
+- `admins`          Set telegram admins
+- `install`         Install MarzneshinIpLimit
+- `update`          Update latest version
+- `uninstall`       Uninstall MarzneshinIpLimit
+- `install-script`  Install MarzneshinIpLimit script
 ---
 ## 💬 پشتیبانی
 
