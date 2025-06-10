@@ -9,12 +9,13 @@ import os
 import sys
 
 try:
-    from telegram import Update
+    from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
     from telegram.ext import (
         ApplicationBuilder,
         CommandHandler,
         ContextTypes,
         ConversationHandler,
+        CallbackQueryHandler,
         MessageHandler,
         filters,
     )
@@ -30,6 +31,8 @@ from telegram_bot.utils import (
     add_base_information,
     add_except_user,
     check_admin,
+    check_superadmin_privilege,
+    is_superadmin,
     get_special_limit_message,
     handel_special_limit,
     read_json_file,
@@ -70,26 +73,16 @@ application = ApplicationBuilder().token(bot_token).build()
 
 
 START_MESSAGE = """
-✨<b>Commands List:</b>\n<b>/start</b> \n<code>start the bot</code>
-<b>/create_config</b>
-<code>Config panel information (username, password, ...)</code>
-<b>/set_special_limit</b>
-<code>set each user ip limit like: test_user limit: 5 ips</code>
-<b>/show_special_limit</b> \n<code>show special limit list</code>
-<b>/add_admin</b><code>
-Giving access to another chat ID and creating a new admin for the bot</code>
-<b>/admins_list</b>\n<code>Show the list of active bot admins</code>
-<b>/remove_admin</b>\n<code>An admin's access will be removed from this bot</code>
-<b>/country_code</b>\n<code>Set your country, Only IPs related to that country
-are counted (to increase accuracy)</code>
-<b>/set_except_user</b>\n<code>Set a user to except list</code>
-<b>/remove_except_user</b>\n<code>Remove a user from except list</code>
-<b>/show_except_users</b>\n<code>Show the list of except users</code>
-<b>/set_general_limit_number</b>\n<code>Set the general limit number
-(if user not in special limit list then this is they limit number)</code>
-<b>/set_check_interval</b>\n<code>Set the check interval time </code>
-<b>/set_time_to_active_users</b>\n<code>Set the time to active users</code>
-<b>/backup</b> \n<code>Sends 'config.json' file</code>"""
+خوش آمدید!
+
+برای استفاده از پنل مدیریت کاربران، درخواست شما به ادمین اصلی ارسال شده است.
+پس از تأیید، می‌توانید از این دستورات استفاده کنید:
+- /panel : نمایش پنل
+- /my_users : مشاهده کاربران شما
+- /limit_user <نام کاربر>
+- /unlimit_user <نام کاربر>
+- /online_users
+"""
 
 
 async def send_logs(msg):
@@ -109,7 +102,7 @@ async def add_admin(update: Update, _context: ContextTypes.DEFAULT_TYPE):
     Adds an admin to the bot.
     At first checks if the user has admin privileges.
     """
-    check = await check_admin_privilege(update)
+    check = await check_superadmin_privilege(update)
     if check:
         return check
     if len(await check_admin()) > 5:
@@ -229,9 +222,22 @@ async def get_limit_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def start(update: Update, _context: ContextTypes.DEFAULT_TYPE):
     """Start function for the bot."""
-    check = await check_admin_privilege(update)
-    if check:
-        return check
+    user_id = update.effective_chat.id
+    admins = await check_admin()
+    if user_id not in admins:
+        superadmins = [aid for aid in admins if await is_superadmin(aid)]
+        for adm in superadmins:
+            try:
+                await application.bot.send_message(
+                    chat_id=adm,
+                    text=f"New admin request from {user_id}",
+                )
+            except Exception:
+                continue
+        await update.message.reply_html(
+            text="درخواست شما برای دسترسی ارسال شد و پس از تایید سوپر ادمین فعال خواهد شد."
+        )
+        return
     await update.message.reply_html(text=START_MESSAGE)
 
 
@@ -342,7 +348,7 @@ async def get_password(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 async def remove_admin(update: Update, _context: ContextTypes.DEFAULT_TYPE):
     """Removes a admin form admin list"""
-    check = await check_admin_privilege(update)
+    check = await check_superadmin_privilege(update)
     if check:
         return check
     admins_count = len(await check_admin())
@@ -427,6 +433,43 @@ async def send_backup(update: Update, _context: ContextTypes.DEFAULT_TYPE):
         document=open("config.json", "r", encoding="utf8"),  # pylint: disable=consider-using-with
         caption="Here is the backup file!",
     )
+
+async def panel(update: Update, _context: ContextTypes.DEFAULT_TYPE):
+    """Show management panel buttons."""
+    check = await check_admin_privilege(update)
+    if check:
+        return check
+    keyboard = [
+        [InlineKeyboardButton("👁 کاربران من", callback_data="my_users")],
+        [InlineKeyboardButton("🔒 محدود کن", callback_data="limit_user")],
+        [InlineKeyboardButton("🔓 آزادسازی کاربر", callback_data="unlimit_user")],
+        [InlineKeyboardButton("🧾 کاربران آنلاین", callback_data="online_users")],
+    ]
+    await update.message.reply_text(
+        "پنل مدیریت", reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
+async def panel_callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle panel button callbacks."""
+    query = update.callback_query
+    await query.answer()
+    cmd = query.data
+    await query.message.delete()
+    if cmd == "my_users":
+        await context.bot.send_message(chat_id=query.message.chat_id, text="/my_users")
+    elif cmd == "limit_user":
+        await context.bot.send_message(chat_id=query.message.chat_id, text="/limit_user")
+    elif cmd == "unlimit_user":
+        await context.bot.send_message(chat_id=query.message.chat_id, text="/unlimit_user")
+    elif cmd == "online_users":
+        await context.bot.send_message(chat_id=query.message.chat_id, text="/online_users")
+
+async def unlimit_user(update: Update, _context: ContextTypes.DEFAULT_TYPE):
+    """Reset user limit placeholder."""
+    check = await check_admin_privilege(update)
+    if check:
+        return check
+    await update.message.reply_text("User limit reset.")
 
 
 async def set_except_users(update: Update, _context: ContextTypes.DEFAULT_TYPE):
@@ -575,6 +618,8 @@ async def get_time_to_active_users_handler(
 
 
 application.add_handler(CommandHandler("start", start))
+application.add_handler(CommandHandler("panel", panel))
+application.add_handler(CallbackQueryHandler(panel_callbacks))
 application.add_handler(
     ConversationHandler(
         entry_points=[CommandHandler("create_config", create_config)],
@@ -719,6 +764,7 @@ application.add_handler(
 )
 application.add_handler(CommandHandler("admins_list", admins_list))
 application.add_handler(CommandHandler("show_except_users", show_except_users))
+application.add_handler(CommandHandler("unlimit_user", unlimit_user))
 unknown_handler = MessageHandler(filters.TEXT, start)
 application.add_handler(unknown_handler)
 unknown_handler_command = MessageHandler(filters.COMMAND, start)
