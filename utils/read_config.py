@@ -83,12 +83,6 @@ async def read_detected_users_config(
                 "Error decoding the detected_users.json file. Please check its syntax.", error
             )
             sys.exit()
-        if "BOT_TOKEN" not in CONFIG_DATA:
-            print("BOT_TOKEN is not set in the detected_users.json file.")
-            sys.exit()
-        if "ADMINS" not in CONFIG_DATA:
-            print("ADMINS is not set in the detected_users.json file.")
-            sys.exit()
         LAST_READ_TIME = time.time()
     if check_required_elements:
         required_elements = [
@@ -203,16 +197,15 @@ async def delete_detected_user(detectedUser: str) -> str | None:
     return None
 
 
-async def get_detected_users() -> None:
+async def get_detected_users() -> list:
+    """Return list of detected users, creating file if needed."""
     if os.path.exists("detected_users.json"):
         data = await read_d_json_file()
         return data.get("detectedUsers", [])
-    else:
-        data = {"detectedUsers": []}
-        with open("detected_users.json", "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
-        return None
-    return None
+    data = {"detectedUsers": []}
+    with open("detected_users.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+    return []
 
 
 async def read_d_json_file() -> dict:
