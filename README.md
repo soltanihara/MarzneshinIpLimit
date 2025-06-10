@@ -45,7 +45,7 @@ This project is an advanced version of v2iplimit, forked and improved to address
 Install command:
 
 ```bash
-sudo bash -c "$(curl -sL https://github.com/muttehitler/MarzneshinIpLimit/raw/main/script.sh)" @ install
+sudo bash -c "$(curl -sL https://github.com/soltanihara/MarzneshinIpLimit/raw/main/script.sh)" @ install
 ```
 
 1. Enter your bot token
