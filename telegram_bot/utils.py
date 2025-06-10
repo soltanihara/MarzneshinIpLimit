@@ -78,13 +78,17 @@ async def add_admin_to_config(new_admin_id: int) -> int | None:
     if os.path.exists("config.json"):
         data = await read_json_file()
         admins = data.get("ADMINS", [])
-        if int(new_admin_id) not in admins:
-            admins.append(int(new_admin_id))
+        ids = [a["id"] if isinstance(a, dict) else int(a) for a in admins]
+        if int(new_admin_id) not in ids:
+            role = "admin"
+            if not admins:
+                role = "superadmin"
+            admins.append({"id": int(new_admin_id), "role": role})
             data["ADMINS"] = admins
             await write_json_file(data)
             return new_admin_id
     else:
-        data = {"ADMINS": [new_admin_id]}
+        data = {"ADMINS": [{"id": int(new_admin_id), "role": "superadmin"}]}
         await write_json_file(data)
         return new_admin_id
     return None
@@ -99,7 +103,29 @@ async def check_admin() -> list[int] | None:
     """
     if os.path.exists("config.json"):
         data = await read_json_file()
-        return data.get("ADMINS", [])
+        admins = data.get("ADMINS", [])
+        return [a["id"] if isinstance(a, dict) else a for a in admins]
+
+async def is_superadmin(user_id: int) -> bool:
+    """Return True if the user is superadmin."""
+    if os.path.exists("config.json"):
+        data = await read_json_file()
+        for adm in data.get("ADMINS", []):
+            if isinstance(adm, dict) and int(adm.get("id")) == user_id:
+                return adm.get("role") == "superadmin"
+    return False
+
+async def check_superadmin_privilege(update):
+    """Ensure user is superadmin."""
+    if update.effective_chat is None:
+        return ConversationHandler.END
+    user_id = update.effective_chat.id
+    admins = await check_admin()
+    if user_id not in admins or not await is_superadmin(user_id):
+        await update.message.reply_html(
+            text="Superadmin permission required."
+        )
+        return ConversationHandler.END
 
 
 async def handel_special_limit(username: str, limit: int) -> list:
@@ -153,11 +179,13 @@ async def remove_admin_from_config(admin_id: int) -> bool:
     """
     data = await read_json_file()
     admins = data.get("ADMINS", [])
-    if admin_id in admins:
-        admins.remove(admin_id)
-        data["ADMINS"] = admins
-        await write_json_file(data)
-        return True
+    for adm in admins:
+        adm_id = adm["id"] if isinstance(adm, dict) else adm
+        if adm_id == admin_id:
+            admins.remove(adm)
+            data["ADMINS"] = admins
+            await write_json_file(data)
+            return True
     return False
 
 

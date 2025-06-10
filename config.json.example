@@ -1,7 +1,9 @@
 {
-    "GENERAL_LIMIT":1,
+    "GENERAL_LIMIT":20,
     "BOT_TOKEN": "BotToken",
-    "ADMINS":[112234455],
+    "ADMINS": [
+        {"id": 123456789, "role": "superadmin"}
+    ],
     "EXCEPT_USERS": [],
     "PANEL_USERNAME": "username",
     "PANEL_PASSWORD": "pass",

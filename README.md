@@ -75,11 +75,17 @@ For manage the app use `marzneshiniplimit` command:
 - `uninstall`       Uninstall MarzneshinIpLimit
 - `install-script`  Install MarzneshinIpLimit script
 
+### Roles
+
+- **superadmin**: full access, can approve or remove other admins.
+- **admin**: manages only assigned users after approval.
+
 ## Telegram Bot Commands
 
 MarzneshinIpLimit can be controlled via a Telegram bot. Here are the available commands:
 
 - **`/start`**: Start the bot.
+- **`/panel`**: Show management panel.
 - **`/create_config`**: Configure panel information (username, password, etc.).
 - **`/set_special_limit`**: Set a specific IP limit for each user (e.g., test_user limit: 5 IPs).
 - **`/show_special_limit`**: Show the list of special IP limits.
@@ -90,6 +96,8 @@ MarzneshinIpLimit can be controlled via a Telegram bot. Here are the available c
 - **`/set_except_user`**: Add a user to the exception list.
 - **`/remove_except_user`**: Remove a user from the exception list.
 - **`/show_except_users`**: Show the list of users in the exception list.
+- **`/unlimit_user <username>`**: Reset user counter.
+- **`/online_users`**: Show limited online users.
 - **`/set_general_limit_number`**: Set the general limit number. If a user is not in the special limit list, this is their limit number.
 - **`/set_check_interval`**: Set the check interval time.
 - **`/set_time_to_active_users`**: Set the time to active users.
@@ -169,9 +177,12 @@ Content-Type: application/json
 ### config.json
 ```json
 {
-    "GENERAL_LIMIT":1,
+    "GENERAL_LIMIT":20,
     "BOT_TOKEN": "BotToken",
-    "ADMINS":[112234455],
+    "ADMINS": [
+        {"id": 123456789, "role": "superadmin"},
+        {"id": 987654321, "role": "admin"}
+    ],
     "EXCEPT_USERS": [
         ["user"]
     ],
