@@ -1,12 +1,12 @@
 <p align="center">
     <a href="#">
-        <img src="https://img.shields.io/github/license/muttehitler/MarzneshinIpLimit?style=flat-square" />
+        <img src="https://img.shields.io/github/license/soltanihara/MarzneshinIpLimit?style=flat-square" />
     </a>
     <a href="https://t.me/muttehitler" target="_blank">
         <img src="https://img.shields.io/badge/telegram-group-blue?style=flat-square&logo=telegram" />
     </a>
     <a href="#">
-        <img src="https://img.shields.io/github/stars/muttehitler/MarzneshinIpLimit?style=social" />
+        <img src="https://img.shields.io/github/stars/soltanihara/MarzneshinIpLimit?style=social" />
     </a>
 </p>
 
