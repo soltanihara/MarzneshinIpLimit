@@ -101,7 +101,9 @@ async def read_detected_users_config(
                 )
     return CONFIG_DATA
 
-async def detect_user(detectedUser: str, ips: list[str]) -> str | None:
+async def detect_user(
+    detectedUser: str, ips: list[str], admin_id: int | None = None, limit: int | None = None
+) -> str | None:
     """
     Add a user to the exception list in the config file.
     If the config file does not exist, it creates one.
@@ -111,29 +113,42 @@ async def detect_user(detectedUser: str, ips: list[str]) -> str | None:
         users = data.get("detectedUsers", [])
         if len([y for y in users if y["user"] == detectedUser]) > 0:
             user = next((y for y in users if y["user"] == detectedUser), None)
-            user["outOfLimitCount"] = int(user["outOfLimitCount"]) + 1
+            user["outOfLimitCount"] = int(user.get("outOfLimitCount", 0)) + 1
+            user["ips"] = list(set(user.get("ips", [])) | set(ips))
+            if admin_id is not None:
+                user["adminId"] = admin_id
+            if limit is not None:
+                user["limit"] = limit
             data["detectedUsers"] = users
             with open("detected_users.json", "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
             return detectedUser
         else:
-            users.append({"user": detectedUser, "ips": ips, "outOfLimitCount": 1})
+            user_obj = {"user": detectedUser, "ips": ips, "outOfLimitCount": 1}
+            if admin_id is not None:
+                user_obj["adminId"] = admin_id
+            if limit is not None:
+                user_obj["limit"] = limit
+            users.append(user_obj)
             data["detectedUsers"] = users
             with open("detected_users.json", "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
             return detectedUser
     else:
-        data = {
-            "detectedUsers": [
-                {"user": detectedUser, "ips": ips, "outOfLimitCount": 1}
-            ]
-        }
+        user_obj = {"user": detectedUser, "ips": ips, "outOfLimitCount": 1}
+        if admin_id is not None:
+            user_obj["adminId"] = admin_id
+        if limit is not None:
+            user_obj["limit"] = limit
+        data = {"detectedUsers": [user_obj]}
         with open("detected_users.json", "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
         return detectedUser
     return None
 
-async def add_detected_user(detectedUser: str, ips:list) -> str | None:
+async def add_detected_user(
+    detectedUser: str, ips: list, admin_id: int | None = None, limit: int | None = None
+) -> str | None:
     """
     Add a user to the exception list in the config file.
     If the config file does not exist, it creates one.
@@ -144,17 +159,23 @@ async def add_detected_user(detectedUser: str, ips:list) -> str | None:
         if len([y for y in users if y["user"] == detectedUser]) > 0:
             return detectedUser
         else:
-            users.append({ "user":detectedUser, "ips":ips, "outOfLimitCount":1 })
+            user_obj = {"user": detectedUser, "ips": ips, "outOfLimitCount": 1}
+            if admin_id is not None:
+                user_obj["adminId"] = admin_id
+            if limit is not None:
+                user_obj["limit"] = limit
+            users.append(user_obj)
             data["detectedUsers"] = users
             with open("detected_users.json", "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
             return detectedUser
     else:
-        data = {
-            "detectedUsers": [
-                {"user": detectedUser, "ips": ips, "outOfLimitCount": 1}
-            ]
-        }
+        user_obj = {"user": detectedUser, "ips": ips, "outOfLimitCount": 1}
+        if admin_id is not None:
+            user_obj["adminId"] = admin_id
+        if limit is not None:
+            user_obj["limit"] = limit
+        data = {"detectedUsers": [user_obj]}
         with open("detected_users.json", "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
         return detectedUser
