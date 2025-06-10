@@ -101,7 +101,7 @@ async def read_detected_users_config(
                 )
     return CONFIG_DATA
 
-async def detect_user(detectedUser: str, ips:str) -> str | None:
+async def detect_user(detectedUser: str, ips: list[str]) -> str | None:
     """
     Add a user to the exception list in the config file.
     If the config file does not exist, it creates one.
@@ -117,15 +117,19 @@ async def detect_user(detectedUser: str, ips:str) -> str | None:
                 json.dump(data, f, indent=2)
             return detectedUser
         else:
-            users.append({ "user":detectedUser, ips:ips, "outOfLimitCount":1 })
+            users.append({"user": detectedUser, "ips": ips, "outOfLimitCount": 1})
             data["detectedUsers"] = users
             with open("detected_users.json", "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
             return detectedUser
     else:
-        data = {"detectedUsers": [detectedUser]}
+        data = {
+            "detectedUsers": [
+                {"user": detectedUser, "ips": ips, "outOfLimitCount": 1}
+            ]
+        }
         with open("detected_users.json", "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
+            json.dump(data, f, indent=2)
         return detectedUser
     return None
 
@@ -146,9 +150,13 @@ async def add_detected_user(detectedUser: str, ips:list) -> str | None:
                 json.dump(data, f, indent=2)
             return detectedUser
     else:
-        data = {"detectedUsers": [detectedUser]}
+        data = {
+            "detectedUsers": [
+                {"user": detectedUser, "ips": ips, "outOfLimitCount": 1}
+            ]
+        }
         with open("detected_users.json", "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
+            json.dump(data, f, indent=2)
         return detectedUser
     return None
 
@@ -167,10 +175,10 @@ async def delete_detected_user(detectedUser: str) -> str | None:
                 json.dump(data, f, indent=2)
             return detectedUser
     else:
-        data = {"detectedUsers": [detectedUser]}
+        data = {"detectedUsers": []}
         with open("detected_users.json", "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2)
-        return detectedUser
+            json.dump(data, f, indent=2)
+        return None
     return None
 
 
